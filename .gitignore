@@ -1,0 +1,8 @@
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Large source video inputs (frames are already extracted into assets/frames/)
+mojito.mp4.mp4
+video/

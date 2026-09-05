@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Musafir Cafe">
+  <rect width="64" height="64" rx="14" fill="#F7F3EC"/>
+  <g fill="none" stroke="#C4633A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" transform="translate(6 5) scale(0.42)">
+    <path d="M34 40h52l-8 46a6 6 0 0 1-6 5H48a6 6 0 0 1-6-5z"/>
+    <path d="M34 40l-6-14h64l-6 14"/>
+    <line x1="70" y1="26" x2="82" y2="10"/>
+    <circle cx="84" cy="9" r="4"/>
+    <path d="M44 58c6 4 12 4 18 0s12-4 18 0"/>
+  </g>
+</svg>

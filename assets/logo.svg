@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 164" role="img" aria-label="Musafir Cafe">
+  <!-- Placeholder logo. Replace with the client's real gold-script PNG/SVG for the pitch. -->
+  <g fill="#B08A4E" font-family="'Cormorant Garamond','Hoefler Text',Georgia,serif">
+    <text x="150" y="78" text-anchor="middle" font-size="58" font-style="italic" font-weight="500" letter-spacing="1">Musafir</text>
+    <text x="150" y="126" text-anchor="middle" font-size="40" font-style="italic" font-weight="400" letter-spacing="6">Cafe</text>
+    <line x1="70" y1="92" x2="230" y2="92" stroke="#B08A4E" stroke-width="1" opacity="0.5"/>
+  </g>
+</svg>

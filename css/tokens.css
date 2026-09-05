@@ -1,0 +1,53 @@
+/* tokens.css — variables only. Owned by the Design System agent.
+   Every other file consumes these. No raw hex belongs anywhere else. */
+
+:root {
+  /* Palette — extracted from the client's printed menu, not a default. */
+  --paper:        #F7F3EC;  /* page base, warm cream */
+  --paper-deep:   #EFE7DA;  /* section alternation, card base */
+  --ink:          #2B2621;  /* primary text, warm near-black */
+  --ink-soft:     #6B6058;  /* secondary text, item descriptions */
+  --terracotta:   #C4633A;  /* illustrations, accents, active states */
+  --gold:         #B08A4E;  /* logo colour, hairlines, dividers */
+  --curtain:      #3A2F28;  /* intro curtain, deep warm brown */
+
+  /* Derived / functional */
+  --hairline:     rgba(176, 138, 78, 0.20);   /* gold at 20% */
+  --paper-glass:        rgba(247, 243, 236, 0.01);  /* nav ~99% transparent */
+  --paper-glass-strong: rgba(247, 243, 236, 0.01);  /* nav ~99% transparent on scroll */
+  --focus:        #C4633A;                      /* terracotta focus ring */
+  --card-shadow:  rgba(43, 38, 33, 0.14);
+  --card-shadow-lift: rgba(43, 38, 33, 0.22);
+
+  /* Type families — Fraunces across the whole site (display + body). */
+  --font-display: "Fraunces", "Hoefler Text", Georgia, serif;
+  --font-body:    "Fraunces", "Hoefler Text", Georgia, serif;
+
+  /* Type scale — fluid, clamped. */
+  --step--1: clamp(0.82rem, 0.78rem + 0.2vw, 0.9rem);
+  --step-0:  clamp(1rem, 0.95rem + 0.25vw, 1.1rem);
+  --step-1:  clamp(1.2rem, 1.1rem + 0.5vw, 1.45rem);
+  --step-2:  clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --step-3:  clamp(2rem, 1.6rem + 2vw, 3rem);
+  --step-4:  clamp(2.6rem, 2rem + 3.2vw, 4.5rem);
+
+  /* Spacing rhythm */
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1.25rem;
+  --space-lg: 2rem;
+  --space-xl: 3.5rem;
+  --space-2xl: 6rem;
+
+  /* Layout */
+  --container: 1200px;
+  --radius: 14px;
+  --radius-lg: 22px;
+
+  /* Motion */
+  --ease-curtain: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 200ms;
+  --dur-med: 600ms;
+  --dur-curtain: 900ms;
+}

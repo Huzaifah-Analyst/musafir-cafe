@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Stylised map">
+  <rect width="640" height="400" fill="#EFE7DA"/>
+  <g stroke="#B08A4E" stroke-width="2" opacity="0.5" fill="none">
+    <path d="M0 120 H640 M0 250 H640 M160 0 V400 M420 0 V400"/>
+    <path d="M0 60 L200 200 L640 160" stroke-width="4" opacity="0.35"/>
+    <path d="M420 0 L520 200 L640 320" stroke-width="4" opacity="0.35"/>
+  </g>
+  <g fill="#C4633A" opacity="0.12">
+    <rect x="180" y="140" width="90" height="70" rx="4"/>
+    <rect x="440" y="270" width="120" height="80" rx="4"/>
+    <rect x="40" y="270" width="90" height="60" rx="4"/>
+  </g>
+  <circle cx="320" cy="200" r="10" fill="#C4633A"/>
+  <path d="M320 232 C300 208 300 196 320 196 C340 196 340 208 320 232 Z" fill="#C4633A"/>
+</svg>

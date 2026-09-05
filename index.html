@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Musafir Cafe — drinks for travellers</title>
+  <meta name="description" content="Musafir Cafe. Iced teas, mojitos, coolers, shakes, smoothies and hot stuff. Made for travellers." />
+  <meta name="theme-color" content="#3A2F28" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+  <!-- Font: Fraunces across the site (self-hosted woff2 in the paid build). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&display=swap" />
+
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body>
+  <a class="skip-link" href="#menu">Skip to the menu</a>
+
+  <!-- ===== INTRO CURTAIN / PRELOADER ===== -->
+  <div class="curtain" id="curtain" aria-hidden="true">
+    <div class="curtain__panel curtain__panel--left"></div>
+    <div class="curtain__panel curtain__panel--right"></div>
+    <div class="curtain__content">
+      <img class="curtain__logo" src="assets/logo.svg" alt="" width="220" height="120" />
+      <p class="curtain__welcome" id="curtainWelcome">Khush aamdeed, musafir</p>
+      <div class="curtain__progress" role="progressbar" aria-label="Loading" aria-hidden="true">
+        <span class="curtain__bar" id="curtainBar"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top fade-scrim so content melts into the paper as it scrolls up. -->
+  <div class="top-scrim" aria-hidden="true"></div>
+
+  <!-- ===== NAV ===== -->
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a class="nav__brand" href="#top" aria-label="Musafir Cafe, home">
+        <img src="assets/logo.svg" alt="Musafir Cafe" width="150" height="82" />
+      </a>
+      <span class="nav__welcome">Welcome, traveller</span>
+      <nav class="nav__actions" aria-label="Primary">
+        <a class="btn btn--ghost nav__visit" href="#visit">Visit us</a>
+        <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </div>
+    <div class="nav__menu" id="navMenu" hidden>
+      <a href="#menu">Menu</a>
+      <a href="#visit">Visit</a>
+      <a href="https://instagram.com/musafircafe.pk" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="hero" aria-labelledby="heroHeading">
+      <div class="hero__inner">
+        <img class="hero__logo" src="assets/logo.svg" alt="Musafir Cafe" width="360" height="196" />
+        <h1 class="hero__heading" id="heroHeading">Drinks for travellers.</h1>
+        <p class="hero__sub">Iced teas, mojitos, coolers, shakes, smoothies and something warm for the road.</p>
+        <a class="hero__cue" href="#menu" aria-label="Scroll to the menu">
+          <span>The menu</span>
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 5v14M6 13l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+      <!-- Signature drink animation mounts here (canvas on desktop, video/image fallback on mobile) -->
+      <figure class="hero__drink" id="heroDrink" aria-hidden="true">
+        <canvas id="mojitoCanvas" width="1280" height="1280"></canvas>
+        <noscript>
+          <img src="assets/img/mojito-poster.webp" alt="Strawberry Passion Mojito" width="640" height="640" />
+        </noscript>
+      </figure>
+    </section>
+
+    <!-- ===== CATEGORIES ===== -->
+    <section class="menu" id="menu" aria-labelledby="menuHeading">
+      <div class="section-head">
+        <p class="eyebrow">The menu</p>
+        <h2 id="menuHeading">Pick your poison, traveller.</h2>
+      </div>
+
+      <!-- Cards are rendered from data/menu.json by js/menu.js, but the full content
+           is ALSO present here in HTML so the menu is readable with JS disabled. -->
+      <ul class="cards" id="cards">
+        <!-- Iced Tea -->
+        <li class="card" data-category="iced-tea">
+          <a class="card__link" href="#/iced-tea">
+            <span class="card__illus" aria-hidden="true" data-illus="iced-tea"></span>
+            <span class="card__name">Iced Tea</span>
+            <span class="card__meta"><span class="card__count">3 drinks</span><span class="card__from">from PKR 400</span></span>
+          </a>
+          <ul class="card__items">
+            <li><span class="item__name">Peach Iced Tea</span> <span class="item__price">PKR 400</span><span class="item__desc">Sunshine in a glass, minus the sunburn.</span></li>
+            <li><span class="item__name">Mango Passion Iced Tea</span> <span class="item__price">PKR 450</span><span class="item__desc">Mango doing mango things.</span></li>
+            <li><span class="item__name">Lychee Strawberry Iced Tea</span> <span class="item__price">PKR 450</span><span class="item__desc">Two fruits, one very good idea.</span></li>
+          </ul>
+        </li>
+        <!-- Mojito -->
+        <li class="card" data-category="mojito">
+          <a class="card__link" href="#/mojito">
+            <span class="card__illus" aria-hidden="true" data-illus="mojito"></span>
+            <span class="card__name">Mojito</span>
+            <span class="card__meta"><span class="card__count">3 drinks</span><span class="card__from">from PKR 450</span></span>
+          </a>
+          <ul class="card__items">
+            <li><span class="item__name">Strawberry Passion Mojito</span> <span class="item__price">PKR 450</span><span class="item__desc">Fizzy, fruity, faintly reckless.</span></li>
+            <li><span class="item__name">Berry Burst Mojito</span> <span class="item__price">PKR 450</span><span class="item__desc">Berry good. No explanation needed.</span></li>
+            <li><span class="item__name">Dragon Mango Mojito</span> <span class="item__price">PKR 450</span><span class="item__desc">Dragonfruit and mango, sworn allies.</span></li>
+          </ul>
+        </li>
+        <!-- Coolers -->
+        <li class="card" data-category="coolers">
+          <a class="card__link" href="#/coolers">
+            <span class="card__illus" aria-hidden="true" data-illus="cooler"></span>
+            <span class="card__name">Daiquiri / Fruit Coolers</span>
+            <span class="card__meta"><span class="card__count">3 drinks</span><span class="card__from">from PKR 600</span></span>
+          </a>
+          <ul class="card__items">
+            <li><span class="item__name">Peachy Flower Cooler</span> <span class="item__price">PKR 600</span><span class="item__desc">Peaches, in their soft era.</span></li>
+            <li><span class="item__name">Mango Coconut Cooler</span> <span class="item__price">PKR 600</span><span class="item__desc">A little tropical, a lot cold.</span></li>
+            <li><span class="item__name">Watermelon Lychee Cooler</span> <span class="item__price">PKR 600</span><span class="item__desc">Summer, bottled and chilled.</span></li>
+          </ul>
+        </li>
+        <!-- Shakes -->
+        <li class="card" data-category="shakes">
+          <a class="card__link" href="#/shakes">
+            <span class="card__illus" aria-hidden="true" data-illus="shake"></span>
+            <span class="card__name">Shakes</span>
+            <span class="card__meta"><span class="card__count">3 drinks</span><span class="card__from">from PKR 650</span></span>
+          </a>
+          <ul class="card__items">
+            <li><span class="item__name">Lotus Shake</span> <span class="item__price">PKR 650</span><span class="item__desc">For the Lotus lovers.</span></li>
+            <li><span class="item__name">Oreo Chocolate Shake</span> <span class="item__price">PKR 650</span><span class="item__desc">Cookies, drowned lovingly in chocolate.</span></li>
+            <li><span class="item__name">Strawberry Cheesecake Shake</span> <span class="item__price">PKR 680</span><span class="item__desc">For the Lotus lovers.</span></li>
+          </ul>
+        </li>
+        <!-- Smoothies -->
+        <li class="card" data-category="smoothies">
+          <a class="card__link" href="#/smoothies">
+            <span class="card__illus" aria-hidden="true" data-illus="smoothie"></span>
+            <span class="card__name">Smoothies</span>
+            <span class="card__meta"><span class="card__count">3 drinks</span><span class="card__from">from PKR 700</span></span>
+          </a>
+          <ul class="card__items">
+            <li><span class="item__name">Mango Peach Smoothie</span> <span class="item__price">PKR 700</span><span class="item__desc">Thick, golden, unbothered.</span></li>
+            <li><span class="item__name">Mixberry Smoothie</span> <span class="item__price">PKR 700</span><span class="item__desc">Every berry we could find.</span></li>
+            <li><span class="item__name">Mango Coconut Smoothie</span> <span class="item__price">PKR 700</span><span class="item__desc">The tropics, but make it thick.</span></li>
+          </ul>
+        </li>
+        <!-- Hot Stuff -->
+        <li class="card" data-category="hot-stuff">
+          <a class="card__link" href="#/hot-stuff">
+            <span class="card__illus" aria-hidden="true" data-illus="hot"></span>
+            <span class="card__name">Hot Stuff</span>
+            <span class="card__meta"><span class="card__count">3 drinks</span><span class="card__from">from PKR 175</span></span>
+          </a>
+          <ul class="card__items">
+            <li><span class="item__name">Karak Chai</span> <span class="item__price">PKR 175</span><span class="item__desc">The reason mornings are forgiven.</span></li>
+            <li><span class="item__name">Cardamom</span> <span class="item__price">PKR 275</span><span class="item__desc">Warm, fragrant, quietly fancy.</span></li>
+            <li><span class="item__name">Cappuccino</span> <span class="item__price">PKR 300</span><span class="item__desc">Foam on top, focus underneath.</span></li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ===== CATEGORY VIEW (populated on card click via FLIP; hidden by default) ===== -->
+    <section class="catview" id="catview" aria-live="polite" hidden>
+      <button class="catview__back" id="catviewBack" type="button">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back to the menu
+      </button>
+      <div class="catview__body" id="catviewBody"></div>
+    </section>
+
+    <!-- ===== VISIT ===== -->
+    <section class="visit" id="visit" aria-labelledby="visitHeading">
+      <div class="section-head">
+        <p class="eyebrow">Come by</p>
+        <h2 id="visitHeading">Find us, traveller.</h2>
+      </div>
+      <div class="visit__grid">
+        <a class="visit__map" href="https://maps.app.goo.gl/57Xcf6vJvxpA4nkbA" target="_blank" rel="noopener" aria-label="Open Musafir Cafe location in Google Maps">
+          <img src="assets/img/map.svg" alt="Map to Musafir Cafe" width="640" height="400" loading="lazy" />
+          <span class="visit__pin">Open in Maps</span>
+        </a>
+        <div class="visit__info">
+          <dl>
+            <dt>Hours</dt>
+            <dd>Daily, 2:00 PM – 12:00 AM</dd>
+            <dt>Where</dt>
+            <dd><a href="https://maps.app.goo.gl/57Xcf6vJvxpA4nkbA" target="_blank" rel="noopener">Open the pin in Google Maps</a></dd>
+          </dl>
+          <div class="visit__actions">
+            <a class="btn btn--solid" id="whatsappBtn" href="https://wa.me/923000000000?text=Assalam%20o%20alaikum%20Musafir%20Cafe%2C%20I%27d%20like%20to%20place%20an%20order." target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.5-2.6-1.1-4.3-3.8-4.4-4-.1-.2-1-1.4-1-2.6 0-1.2.6-1.8.9-2 .2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5.2.5.7 1.7.7 1.8.1.1.1.3 0 .4-.1.2-.1.3-.3.5l-.4.4c-.1.1-.3.3-.1.5.1.3.6 1 1.3 1.6.9.8 1.6 1 1.9 1.2.2.1.4.1.5-.1.1-.2.6-.7.8-.9.1-.2.3-.2.5-.1.2.1 1.4.6 1.6.8.2.1.4.1.4.2.1.1.1.5-.1 1Z"/></svg>
+              Order on WhatsApp
+            </a>
+            <a class="btn btn--ghost" href="https://instagram.com/musafircafe.pk" target="_blank" rel="noopener">Instagram</a>
+            <a class="btn btn--ghost" href="https://g.page/r/PLACEHOLDER/review" target="_blank" rel="noopener">Leave a review</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <img class="footer__logo" src="assets/logo.svg" alt="Musafir Cafe" width="160" height="88" />
+    <p class="footer__capture">10% off your first order. Show this on your first visit, traveller.</p>
+    <nav class="footer__social" aria-label="Social">
+      <a href="https://instagram.com/musafircafe.pk" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://wa.me/923000000000" target="_blank" rel="noopener">WhatsApp</a>
+    </nav>
+    <p class="footer__fine">© <span id="year">2026</span> Musafir Cafe. Made for travellers.</p>
+  </footer>
+
+  <!-- Motion: GSAP 3 + ScrollTrigger + Flip. Loaded from CDN. If they fail, the
+       site still works — every module checks for gsap before using it. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js" defer></script>
+  <!-- Lenis smooth scroll (client requested). Disabled under reduced-motion. -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js" defer></script>
+
+  <!-- Scripts: classic + defer so the demo works by double-clicking index.html
+       (ES modules are blocked on file://). Loaded in dependency order.
+       All content already exists without them. -->
+  <script src="js/menu.js" defer></script>
+  <script src="js/curtain.js" defer></script>
+  <script src="js/cards.js" defer></script>
+  <script src="js/flip.js" defer></script>
+  <script src="js/sequence.js" defer></script>
+  <script src="js/catbg.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

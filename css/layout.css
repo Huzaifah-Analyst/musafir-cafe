@@ -1,0 +1,87 @@
+/* layout.css — grid, spacing rhythm, breakpoints, overflow guard.
+   Owned by the Layout & Responsive agent.
+   Tested at 320, 360, 390, 768, 1024, 1440, 2560. */
+
+main { position: relative; z-index: 2; }
+
+section {
+  padding-inline: clamp(1.1rem, 4vw, 3rem);
+  padding-block: var(--space-2xl);
+}
+
+.section-head {
+  max-width: var(--container);
+  margin-inline: auto;
+  margin-bottom: var(--space-xl);
+  text-align: center;
+}
+.section-head h2 { font-size: var(--step-3); margin-top: 0.3em; }
+
+/* ===== Hero ===== */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding-block: var(--space-2xl);
+  background: var(--paper);
+  overflow: hidden;
+}
+.hero__inner {
+  max-width: 720px;
+  margin-inline: auto;
+  text-align: center;
+  padding-inline: 1.1rem;
+  position: relative;
+  z-index: 3;
+}
+
+/* ===== Cards grid ===== */
+.menu { background: var(--paper-deep); }
+.cards {
+  max-width: var(--container);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr;         /* mobile: 1 column */
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+}
+
+@media (min-width: 768px) {
+  .cards { grid-template-columns: repeat(2, 1fr); }   /* tablet: 2 columns */
+}
+@media (min-width: 1024px) {
+  .cards { grid-template-columns: repeat(3, 1fr); }   /* desktop: 3 x 2 */
+}
+
+/* ===== Category view ===== */
+.catview {
+  max-width: var(--container);
+  margin-inline: auto;
+}
+
+/* ===== Visit ===== */
+.visit { background: var(--paper); }
+.visit__grid {
+  max-width: var(--container);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  align-items: stretch;
+}
+@media (min-width: 768px) {
+  .visit__grid { grid-template-columns: 1.2fr 1fr; }
+}
+
+/* ===== Footer ===== */
+.footer {
+  position: relative;
+  z-index: 2;
+  background: var(--curtain);
+  color: var(--paper);
+  text-align: center;
+  padding: var(--space-xl) 1.1rem;
+  display: grid;
+  gap: var(--space-md);
+  place-items: center;
+}
