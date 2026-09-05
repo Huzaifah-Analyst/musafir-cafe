@@ -1,34 +1,31 @@
-// catbg.js — faded build-up background that scrubs on scroll inside a category view.
-// Frames come from the SECOND Mojito clip (empty glass -> ice -> strawberries -> drink).
-// Classic script; exposes MC.mountCatBuildup(catviewEl) -> cleanup fn.
-// Lazy: frames load only when this is mounted (i.e. when the Mojito category opens).
+// catbg.js — faded, full-screen, scroll-scrubbed build-up background for a category.
+// Frames + count + poster come from the canvas's data-* attributes (set per category
+// in menu.js), so any category with hasBuildup gets its own build-up. Lazy: frames
+// load only when that category opens. Classic script; exposes MC.mountCatBuildup().
 
 window.MC = window.MC || {};
 
 (function (MC) {
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const VER = "3"; // bump whenever frames are re-exported, to bust browser cache
-  const CFG = {
-    count: 60, pad: 4,
-    dir: "assets/frames/category",
-    prefix: "mojito_", ext: "webp",
-    poster: "assets/img/mojito-cat-poster.webp?v=" + VER,
-  };
-  const framePath = (i) =>
-    `${CFG.dir}/${CFG.prefix}${String(i).padStart(CFG.pad, "0")}.${CFG.ext}?v=${VER}`;
+  const VER = "4"; // bump whenever any category frames are re-exported (cache-bust)
+  const pad4 = (n) => String(n).padStart(4, "0");
 
   // Mounts the scrubbing background. Returns a cleanup function (always safe to call).
   MC.mountCatBuildup = function mountCatBuildup(catviewEl) {
     const canvas = catviewEl && catviewEl.querySelector("#catBgCanvas");
     if (!canvas) return function () {};
 
-    const ctx = canvas.getContext("2d");
-    let trigger = null;
-    let cancelled = false;
-    let lastImg = null;
+    const dir = canvas.dataset.dir || "assets/frames/category";
+    const prefix = canvas.dataset.prefix || "";
+    const count = Math.max(1, parseInt(canvas.dataset.count, 10) || 0);
+    const poster = canvas.dataset.poster || "";
+    if (!prefix || !count) return function () {};
 
-    // Match the canvas bitmap to its on-screen (full-viewport) size.
+    const framePath = (i) => `${dir}/${prefix}${pad4(i)}.webp?v=${VER}`;
+
+    const ctx = canvas.getContext("2d");
+    let trigger = null, cancelled = false, lastImg = null;
+
     const sizeCanvas = () => {
       const w = canvas.clientWidth || window.innerWidth;
       const h = canvas.clientHeight || window.innerHeight;
@@ -36,7 +33,7 @@ window.MC = window.MC || {};
       if (canvas.height !== h) canvas.height = h;
     };
 
-    // Draw the (square) frame to fill the whole canvas — "cover" fit, centered.
+    // Draw the frame to fill the whole canvas — "cover" fit, centered.
     const drawImg = (img) => {
       if (!img) return;
       lastImg = img;
@@ -53,20 +50,16 @@ window.MC = window.MC || {};
     window.addEventListener("resize", onResize, { passive: true });
     sizeCanvas();
 
-    // Reduced motion or no GSAP: just show the finished drink, faded, no scrub.
+    // Reduced motion / no GSAP: just show the finished drink, faded, no scrub.
     const gsap = window.gsap;
     if (prefersReduced || !gsap || !window.ScrollTrigger) {
-      const poster = new Image();
-      poster.onload = () => drawImg(poster);
-      poster.src = CFG.poster;
+      if (poster) { const p = new Image(); p.onload = () => drawImg(p); p.src = poster; }
       return function () { window.removeEventListener("resize", onResize); };
     }
 
-    // Preload all frames, then bind the scrub. Draw frame 1 as soon as it's ready
-    // so there's never a blank stage.
-    const frames = new Array(CFG.count);
+    // Preload all frames, then bind the scrub. Frame 1 shows as soon as it's ready.
+    const frames = new Array(count);
     let loaded = 0;
-
     const bind = () => {
       if (cancelled) return;
       trigger = window.ScrollTrigger.create({
@@ -75,25 +68,24 @@ window.MC = window.MC || {};
         end: "bottom bottom",
         scrub: 0.5,
         onUpdate: (self) => {
-          const idx = Math.min(CFG.count - 1, Math.round(self.progress * (CFG.count - 1)));
+          const idx = Math.min(count - 1, Math.round(self.progress * (count - 1)));
           drawImg(frames[idx]);
         },
-        // Fade the backdrop out once we scroll past the category content.
         onLeave: () => { canvas.style.opacity = "0"; },
         onEnterBack: () => { canvas.style.opacity = ""; },
       });
       window.ScrollTrigger.refresh();
     };
 
-    for (let i = 0; i < CFG.count; i++) {
+    for (let k = 0; k < count; k++) {
       const img = new Image();
       img.onload = img.onerror = () => {
         loaded += 1;
-        if (i === 0) drawImg(img);           // first frame up immediately
-        if (loaded === CFG.count) bind();
+        if (k === 0) drawImg(img);
+        if (loaded === count) bind();
       };
-      img.src = framePath(i + 1);
-      frames[i] = img;
+      img.src = framePath(k + 1);
+      frames[k] = img;
     }
 
     return function cleanup() {

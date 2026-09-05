@@ -3,6 +3,8 @@
 Thumbs.db
 *.log
 
-# Large source video inputs (frames are already extracted into assets/frames/)
-mojito.mp4.mp4
-video/
+# Large source inputs (kept locally; processed outputs live in assets/)
+# NOTE: root-anchored so assets/video/ (the web-ready hero clips) is NOT ignored.
+/video/
+/mojito.mp4.mp4
+/demo ready.mp4

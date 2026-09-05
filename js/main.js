@@ -104,7 +104,7 @@ window.MC = window.MC || {};
 
     MC.initCards();
     await MC.initFlip();
-    MC.initSequence();
+    MC.initHero();
 
     await curtainDone;
   }

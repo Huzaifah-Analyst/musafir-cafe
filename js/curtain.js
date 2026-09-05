@@ -11,7 +11,7 @@ window.MC = window.MC || {};
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function waitForAssets(bar) {
-    const imgs = Array.from(document.querySelectorAll(".hero__logo, .curtain__logo"));
+    const imgs = Array.from(document.querySelectorAll(".curtain__logo, .vhero__poster"));
     let loaded = 0;
     const total = Math.max(imgs.length, 1);
 

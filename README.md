@@ -19,7 +19,7 @@ GSAP loads from a CDN, so animations need an internet connection. Without JS or 
 ```
 index.html            all content in the source (no-JS readable)
 css/  tokens · base · layout · components
-js/   main · curtain · cards · flip · sequence · menu   (classic scripts, MC namespace)
+js/   main · curtain · cards · flip · hero · catbg · menu   (classic scripts, MC namespace)
 data/menu.json        single source of truth for items + prices
 assets/               logo, 6 line illustrations, map, mojito poster, frames/
 ```
@@ -32,34 +32,31 @@ Change a price in one place: `data/menu.json` (and the mirrored inline HTML in `
 - Sticky nav: transparent over hero, gains paper bg + gold hairline on scroll, hides on scroll-down (mobile)
 - Six category cards with the gravity settle (overshoot + responsive shadow), one focused at a time, animate once
 - FLIP card → fullscreen category morph with `#/category` hash routing (back restores scroll position); hero + grid hide while a category is open
-- Signature Mojito canvas scrubber in the hero (desktop) with progress + poster/mobile fallback
-- **Mojito category build-up**: a second Mojito clip plays as a faded, scroll-scrubbed background (empty glass → ice → strawberries → drink) behind the category, with an ingredients list
+- **Full-width video hero** (`js/hero.js`): a carousel that cycles the featured drinks — each product's video plays full-bleed while its name slides in on the left in the product's own accent colour; when the clip ends the next product crosses in. Dots jump between slides; clicking a name opens that category. Poster fallback under reduced motion / no-JS.
+- **Per-category build-up background** (`js/catbg.js`): opening a category with `hasBuildup` plays that drink's clip as a faded, full-screen, scroll-scrubbed background (empty glass → ingredients → full drink) with an ingredients list. Currently on **Iced Tea, Mojito, Coolers** (the three with videos).
 - **Lenis smooth scroll** (client requested; off under reduced motion, integrated with GSAP ScrollTrigger)
 - Visit section (static map → real Google Maps pin, hours, WhatsApp, Instagram, review) and footer
 
-### Two Mojito clips
-- `mojito.mp4.mp4` → hero rotating drink → `assets/frames/desktop/` (71 frames, ~2.2 MB)
-- `video/kling_*.mp4` (build-up) → Mojito category background → `assets/frames/category/` (66 frames, ~1.2 MB)
-- Both had the KlingAI watermark removed by cropping it out (`crop=1360:1360:40:0` / `crop=900:900:30:0`), not by blur.
-- Frame URLs carry a `?v=N` (in `js/sequence.js` and `js/catbg.js`) — **bump `VER` whenever you re-export frames** so browsers don't serve stale cached frames.
+### Video assets (per category, data-driven)
+Everything is keyed off `data/menu.json` — a category with `accent`, `heroVideo`/`heroPoster`, `hasBuildup` + `buildupCount` gets both the hero slide and the build-up background. Source clips live in `video/` (git-ignored) and are processed into:
+- **Hero clips** → `assets/video/hero/<id>.mp4` (h264, muted, ~0.3 MB each) + `assets/img/hero/<id>.webp` posters.
+- **Build-up frames** → `assets/frames/category/<id>_NNNN.webp` (~60 frames each, lazy-loaded only when that category opens).
+- Frame URLs carry a `?v=N` (`VER` in `js/catbg.js`) — **bump `VER` whenever you re-export frames** so browsers don't serve stale cached frames.
+- KlingAI watermark on the Mojito clip is cropped out (`crop=…`), not blurred. The Gemini clips (peach, watermelon) are already clean.
 
-## Frame pipeline (to enable the scrubber)
-
-The demo ships without frames and shows the poster. To enable scrubbing, extract and compress a ~4s Mojito clip into `assets/frames/desktop/`:
+### Frame / video pipeline (ffmpeg)
 
 ```bash
-# extract at 24fps, ~90 frames
-ffmpeg -i mojito.mp4 -vf "fps=24,scale=1280:-1" assets/frames/desktop/mojito_%04d.png
-ffmpeg -i mojito.mp4 -vf "fps=24,scale=720:-1"  assets/frames/mobile/mojito_%04d.png
+# build-up frames for a category (fill window only, empty → full), ~60 frames
+ffmpeg -ss 0.2 -i <clip>.mp4 -t 4.5 -vf "fps=14,scale=800:-2" \
+  -c:v libwebp -quality 70 assets/frames/category/<id>_%04d.webp
 
-# compress to WebP q78
-for f in assets/frames/desktop/*.png; do cwebp -q 78 "$f" -o "${f%.png}.webp"; done
-
-# check weight (keep desktop set under ~2.5 MB)
-du -sh assets/frames/desktop
+# hero clip (web-optimized, muted)
+ffmpeg -i <clip>.mp4 -t 6.5 -an -c:v libx264 -crf 28 -pix_fmt yuv420p \
+  -movflags +faststart assets/video/hero/<id>.mp4
 ```
 
-`js/sequence.js` looks for `mojito_0001.webp …`; set `CFG.count` to the frame count.
+Add a new category video by dropping the clip in, running the two commands, and adding `accent` / `heroVideo` / `heroPoster` / `hasBuildup` / `buildupCount` to that category in `data/menu.json`.
 
 ## Client to-do before the pitch
 
@@ -70,7 +67,7 @@ These are placeholders in `data/menu.json` — swap for the real values:
 - **Address** and confirmed **hours**
 - **Logo** — `assets/logo.svg` is a placeholder; drop in the client's real gold-script PNG/SVG
 - **Item one-liners** — only two are the client's verbatim copy ("Mango doing mango things", "Berry good. No explanation needed."); the rest are written in-voice as placeholders pending the client's card
-- **Mojito clip** for the scroll animation
+- **Remaining category videos** — hero + build-up currently cover Iced Tea, Mojito, Coolers; add clips for **Shakes, Smoothies, Hot Stuff** to complete the set (see the pipeline above)
 
 ## Known / flagged
 

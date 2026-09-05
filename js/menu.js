@@ -48,8 +48,11 @@ window.MC = window.MC || {};
     }).join("");
 
     // Faded build-up background (canvas scrubs on scroll) — only where enabled.
+    // Frames live at assets/frames/category/<id>_NNNN.webp; catbg.js reads these attrs.
     const stage = cat.hasBuildup
-      ? `<div class="catview__stage" aria-hidden="true"><canvas class="catview__bgcanvas" id="catBgCanvas" width="640" height="640"></canvas></div>`
+      ? `<div class="catview__stage" aria-hidden="true"><canvas class="catview__bgcanvas" id="catBgCanvas"
+           data-dir="assets/frames/category" data-prefix="${cat.id}_" data-count="${cat.buildupCount || 60}"
+           data-poster="${cat.heroPoster || ""}" width="800" height="450"></canvas></div>`
       : "";
 
     // Ingredients block.

@@ -59,26 +59,26 @@
   </header>
 
   <main id="top">
-    <!-- ===== HERO ===== -->
-    <section class="hero" id="hero" aria-labelledby="heroHeading">
-      <div class="hero__inner">
-        <img class="hero__logo" src="assets/logo.svg" alt="Musafir Cafe" width="360" height="196" />
-        <h1 class="hero__heading" id="heroHeading">Drinks for travellers.</h1>
-        <p class="hero__sub">Iced teas, mojitos, coolers, shakes, smoothies and something warm for the road.</p>
-        <a class="hero__cue" href="#menu" aria-label="Scroll to the menu">
-          <span>The menu</span>
+    <!-- ===== HERO (full-width video carousel; cycles products, name slides in) ===== -->
+    <section class="vhero" id="hero" aria-label="Featured drinks">
+      <div class="vhero__media" aria-hidden="true">
+        <video class="vhero__video is-active" id="vheroA" muted playsinline preload="auto"></video>
+        <video class="vhero__video" id="vheroB" muted playsinline preload="none"></video>
+        <!-- Poster: shown before video plays, under reduced motion, and with JS off. -->
+        <img class="vhero__poster" id="vheroPoster" src="assets/img/hero/iced-tea.webp" alt="A freshly made Musafir Cafe drink" width="1000" height="562" />
+      </div>
+      <div class="vhero__scrim" aria-hidden="true"></div>
+      <div class="vhero__content">
+        <p class="vhero__eyebrow">Drinks for travellers</p>
+        <h1 class="vhero__name" id="vheroName">Iced Tea</h1>
+        <a class="vhero__cue" href="#menu" aria-label="Scroll to the menu">
+          <span>Explore the menu</span>
           <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M12 5v14M6 13l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
       </div>
-      <!-- Signature drink animation mounts here (canvas on desktop, video/image fallback on mobile) -->
-      <figure class="hero__drink" id="heroDrink" aria-hidden="true">
-        <canvas id="mojitoCanvas" width="1280" height="1280"></canvas>
-        <noscript>
-          <img src="assets/img/mojito-poster.webp" alt="Strawberry Passion Mojito" width="640" height="640" />
-        </noscript>
-      </figure>
+      <div class="vhero__dots" id="vheroDots" aria-hidden="true"></div>
     </section>
 
     <!-- ===== CATEGORIES ===== -->
@@ -240,7 +240,7 @@
   <script src="js/curtain.js" defer></script>
   <script src="js/cards.js" defer></script>
   <script src="js/flip.js" defer></script>
-  <script src="js/sequence.js" defer></script>
+  <script src="js/hero.js" defer></script>
   <script src="js/catbg.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>

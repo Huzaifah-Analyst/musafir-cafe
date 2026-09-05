@@ -170,47 +170,100 @@
   .nav__menu { display: none !important; }
 }
 
-/* ============ HERO ============ */
-.hero__logo { margin-inline: auto; width: min(360px, 70vw); height: auto; }
-.hero__heading { font-size: var(--step-4); margin-top: var(--space-md); }
-.hero__sub {
-  color: var(--ink-soft);
-  font-size: var(--step-1);
-  margin-top: var(--space-sm);
-  max-width: 46ch;
-  margin-inline: auto;
+/* ============ HERO (full-width video carousel) ============ */
+.vhero {
+  position: relative;
+  height: 100svh;
+  min-height: 520px;
+  overflow: hidden;
+  background: var(--curtain);
 }
-.hero__cue {
+.vhero__media { position: absolute; inset: 0; z-index: 0; }
+.vhero__video,
+.vhero__poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.vhero__video { opacity: 0; transition: opacity 900ms ease; }
+.vhero__video.is-active { opacity: 1; }
+.vhero__poster { opacity: 1; transition: opacity 600ms ease; z-index: 1; }
+.vhero__poster.is-hidden { opacity: 0; }
+
+/* left + bottom scrim so the coloured name stays legible over any drink */
+.vhero__scrim {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background:
+    linear-gradient(to right, rgba(43,38,33,0.58) 0%, rgba(43,38,33,0.2) 40%, transparent 70%),
+    linear-gradient(to top, rgba(43,38,33,0.45) 0%, transparent 42%);
+}
+
+.vhero__content {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  bottom: 13%;
+  max-width: min(820px, 92vw);
+  padding-inline: clamp(1.1rem, 6vw, 5rem);
+}
+.vhero__eyebrow {
+  color: var(--paper);
+  opacity: 0.85;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: var(--step--1);
+  margin-bottom: 0.5em;
+}
+.vhero__name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 0.95;
+  font-size: clamp(3rem, 2rem + 8vw, 7rem);
+  color: var(--paper);           /* JS overrides with each product's accent */
+  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.35);
+  width: max-content;
+  max-width: 100%;
+  cursor: pointer;
+}
+.vhero__name.anim { animation: nameIn 700ms var(--ease-out) both; }
+@keyframes nameIn { from { opacity: 0; transform: translateX(-48px); } to { opacity: 1; transform: none; } }
+
+.vhero__cue {
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
-  margin-top: var(--space-lg);
-  color: var(--terracotta);
+  margin-top: var(--space-md);
+  color: var(--paper);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   font-size: var(--step--1);
 }
-.hero__cue svg { animation: bob 1.8s ease-in-out infinite; }
+.vhero__cue svg { animation: bob 1.8s ease-in-out infinite; }
 @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
 
-.hero__drink {
+.vhero__dots {
   position: absolute;
-  inset: 0;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  opacity: 0.14;                 /* sits behind hero copy as a soft backdrop */
-  pointer-events: none;
+  z-index: 3;
+  right: clamp(1.1rem, 4vw, 3rem);
+  bottom: 13%;
+  display: flex;
+  gap: 0.55rem;
 }
-.hero__drink canvas {
-  width: min(560px, 80vw);
-  height: auto;
-  aspect-ratio: 1 / 1;
+.vhero__dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: rgba(247, 243, 236, 0.4);
+  border: 1px solid rgba(247, 243, 236, 0.6);
+  transition: background 200ms ease, transform 200ms ease;
 }
-@media (min-width: 1024px) {
-  .hero__drink { opacity: 0.9; justify-content: flex-end; padding-right: 6vw; }
-  .hero__inner { text-align: left; margin-left: 6vw; margin-right: auto; }
-  .hero__logo, .hero__sub { margin-inline: 0; }
+.vhero__dot.is-on { background: var(--paper); transform: scale(1.15); }
+
+@media (prefers-reduced-motion: reduce) {
+  .vhero__name.anim { animation: none; }
+  .vhero__video { transition: none; }
 }
 
 /* ============ CARDS ============ */
