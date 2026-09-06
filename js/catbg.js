@@ -71,8 +71,9 @@ window.MC = window.MC || {};
           const idx = Math.min(count - 1, Math.round(self.progress * (count - 1)));
           drawImg(frames[idx]);
         },
-        onLeave: () => { canvas.style.opacity = "0"; },
-        onEnterBack: () => { canvas.style.opacity = ""; },
+        // No fade-out at the end: the finished-drink frame stays behind the tail
+        // between the ingredients and the Visit section (which has an opaque paper
+        // background and simply scrolls up over it) — so there's no blank gap.
       });
       window.ScrollTrigger.refresh();
     };

@@ -105,32 +105,34 @@ window.MC = window.MC || {};
 
     savedScrollY = window.scrollY;
     isOpen = true;
-
     els.body.innerHTML = MC.renderCategory(cat, menuData && menuData.brand);
-    els.catview.hidden = false;
 
-    // Mount the faded build-up background scrub (no-op for non-buildup categories).
-    if (bgCleanup) { bgCleanup(); bgCleanup = null; }
-    bgCleanup = MC.mountCatBuildup(els.catview);
+    // The "teleport": hide the home page, jump to top, reveal the category, mount
+    // its build-up background. Kept OFF the animation frame — either done instantly
+    // (no-morph path) or once the clone fully covers the screen (so it's invisible).
+    const reveal = () => {
+      els.menu.style.display = "none";
+      if (els.hero) els.hero.style.display = "none";
+      scrollToY(0, true);
+      els.catview.hidden = false;
+      els.catview.style.opacity = "";
+      // Defer the heavy frame preload one frame so it never blocks the morph.
+      requestAnimationFrame(() => {
+        if (bgCleanup) { bgCleanup(); bgCleanup = null; }
+        bgCleanup = MC.mountCatBuildup(els.catview);
+      });
+      els.back && els.back.focus();
+    };
 
-    // Hide the hero while a category is open, so the category (and its build-up
-    // background) is what fills the screen.
-    if (els.hero) els.hero.style.display = "none";
+    if (MC.heroPause) MC.heroPause(); // stop the hero videos decoding/advancing
 
     const gsap = window.gsap;
     const canMorph = gsap && !prefersReduced && card;
+    if (!canMorph) { reveal(); return; }
 
-    if (!canMorph) {
-      els.menu.style.display = "none";
-      scrollToY(0, true);
-      els.back && els.back.focus();
-      return;
-    }
-
+    // Morph a clone of the card to full-screen. The home page stays put underneath
+    // until the clone covers the viewport, so there is no visible jump.
     const first = card.getBoundingClientRect();
-    els.menu.style.display = "none";
-    scrollToY(0, true);
-
     const clone = card.cloneNode(true);
     clone.classList.add("flip-clone");
     Object.assign(clone.style, {
@@ -139,27 +141,19 @@ window.MC = window.MC || {};
     });
     document.body.appendChild(clone);
 
-    const pad = Math.min(window.innerWidth * 0.05, 40);
-    const target = {
-      left: pad, top: pad,
-      width: window.innerWidth - pad * 2,
-      height: window.innerHeight - pad * 2,
-    };
-
-    els.catview.style.opacity = "0";
+    let swapped = false;
+    const swap = () => { if (swapped) return; swapped = true; reveal(); };
 
     gsap.to(clone, {
-      left: target.left, top: target.top,
-      width: target.width, height: target.height,
-      duration: 0.6, ease: "power3.inOut",
-      onComplete: () => {
-        clone.remove();
-        els.catview.style.opacity = "";
-        els.back && els.back.focus();
-      },
+      left: 0, top: 0,
+      width: window.innerWidth, height: window.innerHeight,
+      borderRadius: 0,
+      duration: 0.55, ease: "power3.inOut",
+      onUpdate: function () { if (this.progress() > 0.75) swap(); }, // covered → teleport
+      onComplete: () => { swap(); clone.remove(); },
     });
-    // Content fades in over the last 200ms of the 600ms morph.
-    gsap.to(els.catview, { opacity: 1, duration: 0.2, delay: 0.4 });
+    // Safety: never leave the category unopened if the tween is interrupted.
+    setTimeout(() => { swap(); if (clone.parentNode) clone.remove(); }, 800);
   }
 
   function closeCategory() {
@@ -169,6 +163,7 @@ window.MC = window.MC || {};
     els.catview.style.opacity = "";
     els.menu.style.display = "";
     if (els.hero) els.hero.style.display = "";
+    if (MC.heroResume) MC.heroResume(); // restart the hero carousel
     scrollToY(savedScrollY, true); // restore exact previous position
     window.ScrollTrigger && window.ScrollTrigger.refresh && window.ScrollTrigger.refresh();
   }

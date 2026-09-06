@@ -54,11 +54,17 @@ window.MC = window.MC || {};
     const canVideo = !prefersReduced && els.a && els.a.canPlayType && els.a.canPlayType("video/mp4");
     if (!canVideo) {
       if (els.poster && slides[0].poster) els.poster.src = slides[0].poster;
+      MC.heroPause = MC.heroResume = function () {};
       return;
     }
 
     let active = els.a, standby = els.b, safety = null;
     const arm = () => { clearTimeout(safety); safety = setTimeout(advance, SAFETY_MS); };
+
+    // Let other modules pause the carousel (e.g. while a category overlay is open)
+    // so the videos stop decoding and the cycle doesn't advance underneath.
+    MC.heroPause = function () { clearTimeout(safety); try { active.pause(); standby.pause(); } catch (e) {} };
+    MC.heroResume = function () { try { const p = active.play(); if (p && p.catch) p.catch(() => {}); } catch (e) {} arm(); };
 
     function showActive() {
       active.classList.add("is-active");
